@@ -24,7 +24,56 @@
           user, and adding that card to the DOM.
 */
 
-const followersArray = [];
+
+const cardTable = document.querySelector('.cards');
+
+
+
+axios.get('https://api.github.com/users/LTims080913')
+.then(response => {
+  console.log(response.data);
+    cardTable.append(githubCardMaker(response.data))
+  })
+  
+
+.catch( error => {
+  console.log('stupid dog you made me look bad', error)
+})
+
+// const followersArray = [
+// 'cwilkison', 
+// 'tajahouse', 
+// 'jlc6290', 
+// 'gordoncaister', 
+// 'ashoffmann90', 
+// 'vandesm14' ];
+
+// followersArray.forEach(user => {
+//   axios.get(`https://api.github.com/users/${user}`)
+//   .then (data => {
+//     const newCard = githubCardMaker(data.data)
+//     const ppl = document.querySelector('.cards')
+//     ppl.append(newCard)
+//   })
+// })
+
+axios.get(`https:api.github.com/users/LTims080913/followers`)
+.then (response => {
+  response.data.forEach(item => {
+    axios.get(item.url)
+    .then( d => {
+      cardTable.append(githubCardMaker(d.data))
+      
+    })
+ })
+  
+  
+  
+
+})
+.catch(error => {
+  console.log('uh-oh spaghetti-o', error)
+})
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
@@ -45,6 +94,54 @@ const followersArray = [];
 </div>
 
 */
+function githubCardMaker(data) {
+  //create element
+  const card = document.createElement('div');
+  const userImg = document.createElement('img');
+  const userInfo = document.createElement('div');
+  const name = document.createElement('h3');
+  const username = document.createElement('p');
+  const location = document.createElement('p');
+  const profile = document.createElement('p');
+  const anchor = document.createElement('a');
+  const followers = document.createElement('p');
+  const following = document.createElement('p');
+  const bio = document.createElement('p');
+  //add classes to the elements
+        card.classList.add('card');
+        userInfo.classList.add('card-info');
+        name.classList.add('name');
+        username.classList.add('username');
+  //append elements 
+        card.append(userImg);
+        card.append(userInfo);
+        userInfo.append(name);
+        userInfo.append(username);
+        userInfo.append(location);
+        userInfo.append(followers);
+        userInfo.append(following);
+        userInfo.append(profile);
+        userInfo.append(bio);
+        
+        profile.append(anchor);
+  //provide text content
+        userImg.src = data.avatar_url;
+        name.textContent = data.name;
+        username.textContent = `User Name: ${data.login}`;
+        location.textContent = `Location: ${data.location}`;
+        profile.textContent = `Profile:`;
+        anchor.href = data.url;
+        anchor.textContent = 'https://api.github.com/users/LTims080913';
+        followers.textContent = `Followers: ${data.followers}` ;
+        following.textContent = `Following: ${data.following}`;
+        bio.textContent = `Bio: ${data.bio}` ;
+
+        
+  return card
+}
+
+
+
 
 /* List of LS Instructors Github username's: 
   tetondan
