@@ -35,7 +35,6 @@ axios.get('https://api.github.com/users/LTims080913')
     cardTable.append(githubCardMaker(response.data))
   })
   
-
 .catch( error => {
   console.log('stupid dog you made me look bad', error)
 })
@@ -57,6 +56,7 @@ axios.get('https://api.github.com/users/LTims080913')
 //   })
 // })
 
+//!!!STRETCH GOAL
 axios.get(`https:api.github.com/users/LTims080913/followers`)
 .then (response => {
   response.data.forEach(item => {
@@ -67,9 +67,6 @@ axios.get(`https:api.github.com/users/LTims080913/followers`)
     })
  })
   
-  
-  
-
 })
 .catch(error => {
   console.log('uh-oh spaghetti-o', error)
@@ -99,6 +96,13 @@ function githubCardMaker(data) {
   const card = document.createElement('div');
   const userImg = document.createElement('img');
   const userInfo = document.createElement('div');
+  userInfo.addEventListener('dblclick', () => {
+    card.classList.toggle('more')
+    email.classList.toggle('peek-a-boo')
+    repos.classList.toggle('peek-a-boo')
+    company.classList.toggle('peek-a-boo')
+    expand.classList.toggle('peek-a-boo')
+  })
   const name = document.createElement('h3');
   const username = document.createElement('p');
   const location = document.createElement('p');
@@ -107,11 +111,45 @@ function githubCardMaker(data) {
   const followers = document.createElement('p');
   const following = document.createElement('p');
   const bio = document.createElement('p');
+  const close = document.createElement('button');
+  close.addEventListener('click', (e) => {
+    expand.classList.toggle('peek-a-boo')
+  })
+  const repos = document.createElement('p');
+ 
+  const email = document.createElement('p');
+  
+  const company = document.createElement('p');
+ 
+  const expand = document.createElement('button');
+  expand.addEventListener('click', (e) => {
+    card.classList.toggle('more')
+    email.classList.toggle('peek-a-boo')
+    repos.classList.toggle('peek-a-boo')
+    company.classList.toggle('peek-a-boo')
+    expand.classList.toggle('peek-a-boo')
+    
+  })
+  expand.style.marginTop = '2%';
+  expand.style.borderRadius = '20px';
+  expand.style.backgroundColor = '#1fc8db';
+  expand.style.color = 'red';
+  expand.style.height = '5vh';
+  expand.style.width = '70px';
+
+
+
+
   //add classes to the elements
         card.classList.add('card');
         userInfo.classList.add('card-info');
         name.classList.add('name');
         username.classList.add('username');
+        repos.classList.add('peek-a-boo')
+        email.classList.add('peek-a-boo')
+        company.classList.add('peek-a-boo')
+        
+
   //append elements 
         card.append(userImg);
         card.append(userInfo);
@@ -122,8 +160,13 @@ function githubCardMaker(data) {
         userInfo.append(following);
         userInfo.append(profile);
         userInfo.append(bio);
-        
         profile.append(anchor);
+        userInfo.append(expand);
+        userInfo.append(repos);
+        userInfo.append(email);
+        userInfo.append(company);
+        
+
   //provide text content
         userImg.src = data.avatar_url;
         name.textContent = data.name;
@@ -135,6 +178,11 @@ function githubCardMaker(data) {
         followers.textContent = `Followers: ${data.followers}` ;
         following.textContent = `Following: ${data.following}`;
         bio.textContent = `Bio: ${data.bio}` ;
+        expand.textContent = `Expand`;
+        repos.textContent = `Number of Public Repos: ${data.public_repos}`;
+        email.textContent = `Email: ${data.email}`;
+        company.textContent = `Company: ${data.company}`;
+        
 
         
   return card
